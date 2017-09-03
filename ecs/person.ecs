@@ -1,0 +1,7 @@
+identityComponent: ()
+personComponent: ()
+
+--- personComponent
+
+cardsHeld: []
+cardInferences: {}
