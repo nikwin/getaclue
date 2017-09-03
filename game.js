@@ -3,16 +3,18 @@ var rendererSystem = function(game, entities){
 
     _.each(entities, (entity) => {
         _.each(entity.renderComponents, (renderComponent) => {
-            renderers[renderComponent].push({
-                render: renderComponent.render,
+            renderers[renderComponent.priority].push({
+                renderComponent: renderComponent,
                 entity: entity,
                 rect: renderComponent.getRect(entity)
             });
         });
     });
 
-    _.each(renderers, (renderGroup) => {
-        renderGroup.render(game, renderGroup.entity, renderGroup.rect);
+    _.each(renderers, (renderSet) => {
+        _.each(renderSet, (renderGroup) => {
+        renderGroup.renderComponent.render(game, renderGroup.entity, renderGroup.rect);
+        });
     });
 };
 

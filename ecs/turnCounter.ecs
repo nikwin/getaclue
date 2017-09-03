@@ -10,7 +10,7 @@ turnCount: 0
 !inherit renderComponent
 
 getRect: #turnCounterGetRect
-priority: 24
+priority: 20
 render: #turnCounterRender
 
 #
@@ -19,6 +19,6 @@ var turnCounterGetRect = function(){
 };
 
 var turnCounterRender = function(game, entity, rect){
-    ctx.fillText('' + entity.turnCounterComponent.turnCount, rect[0], rect[1] + rect[3]);
+    ctx.fillText('Turn: ' + entity.turnCounterComponent.turnCount, rect[0], rect[1] + rect[3]);
 };
 #
