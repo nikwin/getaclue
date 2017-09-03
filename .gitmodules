@@ -1,0 +1,3 @@
+[submodule "ecsCompiler"]
+	path = ecsCompiler
+	url = https://github.com/nikwin/ecsCompiler.git
