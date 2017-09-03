@@ -27,6 +27,20 @@ Game.prototype.initialize = function(){
     _.each(PARAMETERS.startEntityGroups, (group) => {
         this.entities = this.entities.concat(makeAllEcs(group));
     });
+
+    var cards = _.filter(this.entities, entity => entity.cardComponent);
+    var people = _.filter(this.entities, entity => entity.personComponent);
+
+    var sortedCards = _.groupBy(cards, card => card.cardComponent.category);
+    var personIndex = 0;
+    
+    _.each(sortedCards, (cards) => {
+        _.each(cards, (card) => {
+            people[personIndex].personComponent.cardsHeld.push(card.key);
+            personIndex += 1;
+            personIndex %= people.length;
+        });
+    });
 };
 
 Game.prototype.draw = function(){

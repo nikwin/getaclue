@@ -5,6 +5,7 @@
   - [ ] Keeping track of what you know and what you don't know.
   - [ ] Having multiple other players that are AI controlled.
   - [ ] Make the conversation snippets.
+  - [ ] Consider making the building and having people walk around.
 * Art / Single Line Descriptions
   - [ ] Seven guys
   - [ ] Seven girls
