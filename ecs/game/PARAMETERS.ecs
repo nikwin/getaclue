@@ -1,1 +1,2 @@
-!arg startEntities person1|
+!arg startEntities turnCounter|
+!arg startEntityGroups person|
