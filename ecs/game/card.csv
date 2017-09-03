@@ -1,0 +1,22 @@
+key,name,category
+card_arun,Arun,boy
+card_bharat,Bharat,boy
+card_chirag,Chirag,boy
+card_darshan,Darshan,boy
+card_eshan,Eshan,boy
+card_farhaan,Farhaan,boy
+card_george,George,boy
+card_alia,Alia,girl
+card_brinda,Brinda,girl
+card_chitra,Chitra,girl
+card_devi,Devi,girl
+card_eshita,Eshita,girl
+card_fatima,Fatima,girl
+card_geeta,Geeta,girl
+card_geo,Geography Classroom,place
+card_lab,Science Laboratory,place
+card_eng,English Classroom,place
+card_lib,Library,place
+card_firstAid,First Aid Room,place
+card_lockers,Locker Room,place
+card_cafe,Cafeteria,place
