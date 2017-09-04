@@ -11,17 +11,13 @@ makeQuestion: #playerMakeQuestionFn
 confirmed: false
 question: "question"
 
-boyChosen: 0
-girlChosen: 0
-placeChosen: 0
+cardsChosen: #{}
 
 #
 var playerMakeQuestionFn = function(game, questionMaker){
     if (this.confirmed){
         return game.makeEntities(questionMaker, this.question, {
-            boyChosen: this.boyChosen,
-            girlChosen: this.girlChosen,
-            placeChosen: this.placeChosen
+            cardsChosen: cardsChosen
         })[0];
     }
     return false;
@@ -38,21 +34,56 @@ render: #playerMakeQuestionRender
 
 #
 var playerMakeQuestionGetRect = function(){
-    return [10, 10, 400, 600];
+    return [10, 10, 800, 725];
 };
 
 var playerMakeQuestionRender = function(game, entity, rect){
-    ctx.fillStyle = '#cccccc';
+    ctx.fillStyle = '#ccaaaa';
     ctxFillRect(rect);
+
+    var cards = _.filter(game.entities, gameEntity => gameEntity.cardComponent);
+    var sortedCards = _.groupBy(cards, card => card.cardComponent.category);
+
+    var idx = 0;
+
+    var touchRects = {};
+    
+    _.each(sortedCards, (cards, key) => {
+        ctx.fillStyle = '#000000';
+        var y = rect[1] + 150 * idx + 200;
+        ctx.fillText(key, rect[0] + 10, y);
+    
+        ctx.textAlign = 'center';
+        _.each(cards, (card, i) => {
+            var x = rect[0] + 100 + 100 * i;
+            ctx.fillText(card.identityComponent.name, x, y);
+            ctx.strokeStyle = (card.identityComponent.key == entity.questionMakingComponent.cardsChosen[key]) ? '#ffffff' : '#000000';
+            var outlineRect = [x - 45, y - 60, 90, 120];
+            ctx.strokeRect(outlineRect[0], outlineRect[1], outlineRect[2], outlineRect[3]);
+            touchRects[card.identityComponent.key] = outlineRect;
+        });
+        ctx.textAlign = 'left';
+    
+        idx += 1;
+    });
+
+    entity.touchHandleComponent.touchRects = touchRects;
+    
 };
 #
 
 --- playerMakeQuestionTouchHandleComponent
 
 handleTouch: #playerMakeQuestionHandleTouch
+touchRects: #undefined
 
 #
-var playerMakeQuestionHandleTouch = function(){
-    
+var playerMakeQuestionHandleTouch = function(entity, game, touchPos){
+    _.each(this.touchRects, (rect, key) => {
+        if (containsPos(rect, touchPos)){
+            var card = game.entityForKey(key);
+            entity.questionMakingComponent.cardsChosen[card.cardComponent.category] = card.identityComponent.key;
+        }
+    });
 };
 #

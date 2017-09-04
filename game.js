@@ -90,10 +90,12 @@ Game.prototype.initialize = function(){
             personIndex %= people.length;
         });
     });
+    
+    bindHandler.bindFunction(this.getTouchFunction());
 };
 
 Game.prototype.draw = function(){
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#aaaaaa';
     ctx.fillRect(0, 0, width, height);
     rendererSystem(this, this.entities);
 };
@@ -156,6 +158,22 @@ Game.prototype.addEntity = function(entity){
 
 Game.prototype.entityForKey = function(key){
     return _.filter(this.entities, entity => (entity.identityComponent && entity.identityComponent.key == key))[0];
+};
+
+Game.prototype.getTouchFunction = function(){
+    var that = this;
+    return function(e){
+        e.preventDefault();
+        
+        var pos = getPos(e);
+        that.lastPos = pos;
+        
+        _.chain(that.entities)
+            .filter(entity => entity.touchHandleComponent)
+            .each(entity => entity.touchHandleComponent.handleTouch(entity, that, pos));
+                
+        return false;
+    };
 };
 
 var getGame = function(gameProperties){
