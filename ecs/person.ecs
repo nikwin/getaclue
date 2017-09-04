@@ -9,11 +9,14 @@ cardInferences: {}
 isPlayer: ?#false
 getQuestionMaker: #personGetQuestionMaker
 getAnswer: #personGetAnswer
+informAnswer: #personInformAnswer
 
 playerMakeQuestion: "playerMakeQuestion"
 playerMakeAnswer: "playerMakeAnswer"
 aiMakeQuestion: "aiMakeQuestion"
 aiMakeAnswer: "aiMakeAnswer"
+playerInformAnswer: "playerInformAnswer"
+aiInformAnswer: "aiInformAnswer"
 
 #
 var personGetQuestionMaker = function(){
@@ -22,5 +25,9 @@ var personGetQuestionMaker = function(){
 
 var personGetAnswer = function(){
     return (this.isPlayer) ? this.playerMakeAnswer : this.aiMakeAnswer;
+};
+
+var personInformAnswer = function(){
+    return (this.isPlayer) ? this.playerInformAnswer : this.aiInformAnswer;
 };
 #

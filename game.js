@@ -25,13 +25,19 @@ var actionSystem = function(game, entities){
     var questionMaker = _.filter(entities, entity => entity.questionMakingComponent)[0];
     var turnCounter = _.filter(entities, entity => entity.turnCounterComponent)[0];
     var person = people[turnCounter.turnCounterComponent.turnCount];
-    
-    if (answer){
-        var result = answer.answerComponent.tryAnswer(question);
+    var result = _.filter(entities, entity => entity.resultComponent)[0];
+
+    if (result){
+        
+    }
+    else if (answer){
+        result = answer.answerComponent.tryAnswer(question, game);
         if (result){
             answer.healthComponent.kill();
             
             if (result.success){
+                person.personComponent.informAnswer(result);
+
                 question.healthComponent.kill();
                 turnCounter.turnCounterComponent.turnCount += 1;
             }
@@ -42,7 +48,9 @@ var actionSystem = function(game, entities){
         personIndex %= people.length;
 
         person = people[personIndex];
-        game.makeEntities(person, person.personComponent.getAnswer());
+        game.makeEntities(person, person.personComponent.getAnswer(), {
+            personId: person.uid
+        });
         question.questionComponent.offset += 1;
         if (question.questionComponent.offset == people.length){
             question.healthComponent.kill();
@@ -157,6 +165,10 @@ Game.prototype.addEntity = function(entity){
 
 Game.prototype.entityForKey = function(key){
     return _.filter(this.entities, entity => (entity.identityComponent && entity.identityComponent.key == key))[0];
+};
+
+Game.prototype.entityForUid = function(uid){
+    return _.filter(this.entities, entity => (entity.uid == uid))[0];
 };
 
 Game.prototype.getTouchFunction = function(){

@@ -1,0 +1,36 @@
+answerComponent: aiAnswerComponent()
+healthComponent: ()
+
+--- aiAnswerComponent
+
+!inherit answerComponent
+
+tryAnswer: #aiTryAnswer
+waiting: true
+
+#
+var aiTryAnswer = function(question, game){
+    if (this.waiting){
+        return false;
+    }
+
+    var person = game.entityForUid(this.personId);
+    
+    var categories = Object.keys(question.questionComponent.cardsChosen);
+    while (categories.length > 0){
+        var category = _.sample(categories);
+        categories.splice(categories.index(category), 1);
+
+        var card = question.questionComponent.cardsChosen[category];
+        if (_.contains(person.personComponent.cardsHeld, card)){
+            return {
+                card: card,
+                success: true
+            };
+        }
+    }
+
+    return {success: false};
+};
+#
+
