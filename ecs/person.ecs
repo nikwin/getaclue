@@ -5,3 +5,22 @@ personComponent: ()
 
 cardsHeld: []
 cardInferences: {}
+
+isPlayer: ?#false
+getQuestionMaker: #personGetQuestionMaker
+getAnswer: #personGetAnswer
+
+playerMakeQuestion: "playerMakeQuestion"
+playerMakeAnswer: "playerMakeAnswer"
+aiMakeQuestion: "aiMakeQuestion"
+aiMakeAnswer: "aiMakeAnswer"
+
+#
+var personGetQuestionMaker = function(){
+    return (person.isPlayer) ? this.playerMakeQuestion : this.aiMakeQuestion;
+};
+
+var personGetAnswer = function(){
+    return (person.isPlayer) ? this.playerMakeAnswer : this.aiMakeAnswer;
+};
+#

@@ -1,0 +1,9 @@
+health: ?1
+kill: #killHealthComponent
+
+#
+var killHealthComponent = function(){
+    this.health = 0;
+};
+#
+

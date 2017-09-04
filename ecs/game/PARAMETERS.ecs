@@ -1,2 +1,4 @@
 !arg startEntities turnCounter|
 !arg startEntityGroups person|card
+
+!arg turnCounter turnCounter

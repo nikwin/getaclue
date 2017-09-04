@@ -1,0 +1,7 @@
+answerComponent: ()
+healthComponent: ()
+
+--- answerComponent
+
+tryAnswer: #
+personId: 

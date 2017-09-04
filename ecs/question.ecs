@@ -1,0 +1,11 @@
+questionComponent: ()
+healthComponent: ()
+
+--- questionComponent
+
+boyChosen:
+girlChosen:
+placeChosen:
+
+offset: 1
+personId:

@@ -1,7 +1,8 @@
 * Systems
   - [X] Make the people
   - [X] Make the cards
-  - [ ] Distribute the starting cards
+  - [X] Distribute the starting cards
+  - [ ] Asking a question
   - [ ] Keeping track of what you know and what you don't know.
   - [ ] Having multiple other players that are AI controlled.
   - [ ] Make the conversation snippets.

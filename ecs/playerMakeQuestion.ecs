@@ -1,0 +1,48 @@
+healthComponent: healthComponent()
+renderComponents: [playerMakeQuestionRenderComponent()]
+touchHandleComponent: playerMakeAnswerRenderComponent()
+questionMakingComponent: playerQuestionMakingComponent()
+
+--- playerMakeQuestionRenderComponent
+
+!inherit renderComponent
+
+getRect: #playerMakeQuestionGetRect
+priority: 18
+render: #playerMakeQuestionRender
+
+#
+var playerMakeQuestionGetRect = function(){
+    return [10, 10, 400, 600];
+};
+
+var playerMakeQuestionRender = function(game, entity, rect){
+    ctx.fillStyle = '#cccccc';
+    ctx.fillRect(rect);
+};
+#
+
+--- playerQuestionMakingComponent
+
+!inherit questionMakingComponent
+
+makeQuestion: #playerMakeQuestionFn
+confirmed: false
+question: "question"
+
+boyChosen: 0
+girlChosen: 0
+placeChosen: 0
+
+#
+var playerMakeQuestionFn = function(game, questionMaker){
+    if (this.confirmed){
+        return game.makeEntities(questionMaker, this.question, {
+            boyChosen: this.boyChosen,
+            girlChosen: this.girlChosen,
+            placeChosen: this.placeChosen
+        })[0];
+    }
+    return false;
+};
+#

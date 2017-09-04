@@ -19,6 +19,7 @@ var turnCounterGetRect = function(){
 };
 
 var turnCounterRender = function(game, entity, rect){
+    ctx.fillStyle = '#000000';
     ctx.fillText('Turn: ' + entity.turnCounterComponent.turnCount, rect[0], rect[1] + rect[3]);
 };
 #
