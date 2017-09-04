@@ -20,10 +20,10 @@ var rendererSystem = function(game, entities){
 
 var actionSystem = function(game, entities){
     var people = _.filter(entities, entity => entity.personComponent);
-    var answer = _.filter(entities, entity => entity.answerComponent);
-    var question = _.filter(entities, entity => entity.questionComponent);
-    var questionMaker = _.filter(entities, entity => entity.questionMakingComponent);
-    var turnCounter = game.entityForKey(PARAMETERS.turnCounter);
+    var answer = _.filter(entities, entity => entity.answerComponent)[0];
+    var question = _.filter(entities, entity => entity.questionComponent)[0];
+    var questionMaker = _.filter(entities, entity => entity.questionMakingComponent)[0];
+    var turnCounter = _.filter(entities, entity => entity.turnCounterComponent)[0];
     var person;
     
     if (answer){
@@ -155,7 +155,7 @@ Game.prototype.addEntity = function(entity){
 };
 
 Game.prototype.entityForKey = function(key){
-    return _.first(this.entities, entity => (entity.identityComponent && entity.identityComponent.key == key));
+    return _.filter(this.entities, entity => (entity.identityComponent && entity.identityComponent.key == key))[0];
 };
 
 var getGame = function(gameProperties){

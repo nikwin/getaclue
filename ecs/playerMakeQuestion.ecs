@@ -1,26 +1,7 @@
 healthComponent: healthComponent()
-renderComponents: [playerMakeQuestionRenderComponent()]
-touchHandleComponent: playerMakeAnswerRenderComponent()
 questionMakingComponent: playerQuestionMakingComponent()
-
---- playerMakeQuestionRenderComponent
-
-!inherit renderComponent
-
-getRect: #playerMakeQuestionGetRect
-priority: 18
-render: #playerMakeQuestionRender
-
-#
-var playerMakeQuestionGetRect = function(){
-    return [10, 10, 400, 600];
-};
-
-var playerMakeQuestionRender = function(game, entity, rect){
-    ctx.fillStyle = '#cccccc';
-    ctx.fillRect(rect);
-};
-#
+renderComponents: [playerMakeQuestionRenderComponent()]
+touchHandleComponent: playerMakeQuestionTouchHandleComponent()
 
 --- playerQuestionMakingComponent
 
@@ -44,5 +25,34 @@ var playerMakeQuestionFn = function(game, questionMaker){
         })[0];
     }
     return false;
+};
+#
+
+--- playerMakeQuestionRenderComponent
+
+!inherit renderComponent
+
+getRect: #playerMakeQuestionGetRect
+priority: 18
+render: #playerMakeQuestionRender
+
+#
+var playerMakeQuestionGetRect = function(){
+    return [10, 10, 400, 600];
+};
+
+var playerMakeQuestionRender = function(game, entity, rect){
+    ctx.fillStyle = '#cccccc';
+    ctxFillRect(rect);
+};
+#
+
+--- playerMakeQuestionTouchHandleComponent
+
+handleTouch: #playerMakeQuestionHandleTouch
+
+#
+var playerMakeQuestionHandleTouch = function(){
+    
 };
 #

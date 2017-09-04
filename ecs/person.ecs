@@ -17,10 +17,10 @@ aiMakeAnswer: "aiMakeAnswer"
 
 #
 var personGetQuestionMaker = function(){
-    return (person.isPlayer) ? this.playerMakeQuestion : this.aiMakeQuestion;
+    return (this.isPlayer) ? this.playerMakeQuestion : this.aiMakeQuestion;
 };
 
 var personGetAnswer = function(){
-    return (person.isPlayer) ? this.playerMakeAnswer : this.aiMakeAnswer;
+    return (this.isPlayer) ? this.playerMakeAnswer : this.aiMakeAnswer;
 };
 #
