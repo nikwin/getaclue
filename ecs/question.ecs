@@ -3,9 +3,7 @@ healthComponent: ()
 
 --- questionComponent
 
-boyChosen:
-girlChosen:
-placeChosen:
+cardsChosen:
 
 offset: 1
 personId:

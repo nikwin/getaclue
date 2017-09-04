@@ -8,16 +8,18 @@ touchHandleComponent: playerMakeQuestionTouchHandleComponent()
 !inherit questionMakingComponent
 
 makeQuestion: #playerMakeQuestionFn
+firstConfirm: false
 confirmed: false
 question: "question"
 
 cardsChosen: #{}
 
 #
-var playerMakeQuestionFn = function(game, questionMaker){
+var playerMakeQuestionFn = function(entity, game, person){
     if (this.confirmed){
-        return game.makeEntities(questionMaker, this.question, {
-            cardsChosen: cardsChosen
+        return game.makeEntities(entity, this.question, {
+            cardsChosen: this.cardsChosen,
+            personId: person.uid
         })[0];
     }
     return false;
@@ -40,42 +42,75 @@ var playerMakeQuestionGetRect = function(){
 var playerMakeQuestionRender = function(game, entity, rect){
     ctx.fillStyle = '#ccaaaa';
     ctxFillRect(rect);
-
-    var cards = _.filter(game.entities, gameEntity => gameEntity.cardComponent);
-    var sortedCards = _.groupBy(cards, card => card.cardComponent.category);
-
-    var idx = 0;
-
+        
     var touchRects = {};
-    
-    _.each(sortedCards, (cards, key) => {
+    entity.touchHandleComponent.confirmRect = undefined;
+    entity.touchHandleComponent.rejectRect = undefined;
+
+    if (entity.questionMakingComponent.firstConfirm){
+        var cards = _.map(entity.questionMakingComponent.cardsChosen, key => game.entityForKey(key));
+        var cardForCategory = (category) => (_.filter(cards, card => (card.cardComponent.category == category))[0]).identityComponent.name;
+        var girl = cardForCategory('girl');
+        var boy = cardForCategory('boy');
+        var place = cardForCategory('place');
+        var txt = 'So you want to ask if it was ' + girl + ' and ' + boy + ' in ' + place + '?';
         ctx.fillStyle = '#000000';
-        var y = rect[1] + 150 * idx + 200;
-        ctx.fillText(key, rect[0] + 10, y);
-    
         ctx.textAlign = 'center';
-        _.each(cards, (card, i) => {
-            var x = rect[0] + 100 + 100 * i;
-            ctx.fillText(card.identityComponent.name, x, y);
-            ctx.strokeStyle = (card.identityComponent.key == entity.questionMakingComponent.cardsChosen[key]) ? '#ffffff' : '#000000';
-            var outlineRect = [x - 45, y - 60, 90, 120];
-            ctx.strokeRect(outlineRect[0], outlineRect[1], outlineRect[2], outlineRect[3]);
-            touchRects[card.identityComponent.key] = outlineRect;
+        ctx.fillText(txt, rect[0] + rect[2] / 2, rect[1] + 200);
+
+        playerMakeRenderConfirmRect('YES!', entity, rect);
+    }
+    else{
+        var cards = _.filter(game.entities, gameEntity => gameEntity.cardComponent);
+        var sortedCards = _.groupBy(cards, card => card.cardComponent.category);
+
+        var idx = 0;
+
+        _.each(sortedCards, (cards, key) => {
+            ctx.fillStyle = '#000000';
+            var y = rect[1] + 150 * idx + 200;
+            ctx.fillText(key, rect[0] + 10, y);
+            
+            ctx.textAlign = 'center';
+            _.each(cards, (card, i) => {
+                var x = rect[0] + 100 + 100 * i;
+                ctx.fillText(card.identityComponent.name, x, y);
+                ctx.strokeStyle = (card.identityComponent.key == entity.questionMakingComponent.cardsChosen[key]) ? '#ffffff' : '#000000';
+                var outlineRect = [x - 45, y - 60, 90, 120];
+                ctxRoundedRect(outlineRect);
+                touchRects[card.identityComponent.key] = outlineRect;
+            });
+            ctx.textAlign = 'left';
+            
+            idx += 1;
         });
-        ctx.textAlign = 'left';
-    
-        idx += 1;
-    });
+
+        if (_.all(sortedCards, (card, key) => entity.questionMakingComponent.cardsChosen[key])){
+            playerMakeRenderConfirmRect('Sounds Good!', entity, rect);
+        }
+    }
 
     entity.touchHandleComponent.touchRects = touchRects;
+};
+
+var playerMakeRenderConfirmRect = function(confirmText, entity, rect){
+    var confirmRect = [rect[0] + rect[2] / 2 - 100, rect[1] + rect[3] - 100, 200, 50];
+    ctxRoundedRect(confirmRect);
+    ctx.textAlign = 'center';
+    ctx.fillText(confirmText, confirmRect[0] + confirmRect[2] / 2, confirmRect[1] + confirmRect[3] / 2);
+    ctx.textAlign = 'left';
     
+    entity.touchHandleComponent.confirmRect = confirmRect;
 };
 #
 
 --- playerMakeQuestionTouchHandleComponent
 
 handleTouch: #playerMakeQuestionHandleTouch
+
 touchRects: #undefined
+confirmRect: #undefined
+rejectRect: #undefined
 
 #
 var playerMakeQuestionHandleTouch = function(entity, game, touchPos){
@@ -85,5 +120,18 @@ var playerMakeQuestionHandleTouch = function(entity, game, touchPos){
             entity.questionMakingComponent.cardsChosen[card.cardComponent.category] = card.identityComponent.key;
         }
     });
+
+    if (this.confirmRect && containsPos(this.confirmRect, touchPos)){
+        if (entity.questionMakingComponent.firstConfirm){
+            entity.questionMakingComponent.confirmed = true;
+        }
+        else{
+            entity.questionMakingComponent.firstConfirm = true;
+        }
+    }
+
+    if (this.rejectRect && containsPos(this.rejectRect, touchPos) && entity.questionMakingComponent.firstConfirm){
+        entity.questionMakingComponent.firstConfirm = false;
+    }
 };
 #

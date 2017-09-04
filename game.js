@@ -24,7 +24,7 @@ var actionSystem = function(game, entities){
     var question = _.filter(entities, entity => entity.questionComponent)[0];
     var questionMaker = _.filter(entities, entity => entity.questionMakingComponent)[0];
     var turnCounter = _.filter(entities, entity => entity.turnCounterComponent)[0];
-    var person;
+    var person = people[turnCounter.turnCounterComponent.turnCount];
     
     if (answer){
         var result = answer.answerComponent.tryAnswer(question);
@@ -50,13 +50,12 @@ var actionSystem = function(game, entities){
         }
     }
     else if (questionMaker){
-        question = questionMaker.questionMakingComponent.makeQuestion(game, questionMaker);
+        question = questionMaker.questionMakingComponent.makeQuestion(questionMaker, game, person);
         if (question){
             questionMaker.healthComponent.kill();
         }
     }
     else{
-        person = people[turnCounter.turnCounterComponent.turnCount];
         game.makeEntities(person, person.personComponent.getQuestionMaker());
     }
 };
