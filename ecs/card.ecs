@@ -1,6 +1,20 @@
 identityComponent: ()
 cardComponent: ()
+cardRenderComponent: ()
 
 --- cardComponent
 
 category:
+
+--- cardRenderComponent
+
+cardRender: #
+
+#
+var cardRender = function(entity, rect, isHighlighted){
+    ctx.strokeStyle = isHighlighted ? '#ffffff' : '#000000';
+    ctxRoundedRect(rect);
+    ctx.fillStyle = '#000000';
+    ctx.fillText(entity.identityComponent.name, rect[0] + 45, rect[1] + 60);
+};
+#

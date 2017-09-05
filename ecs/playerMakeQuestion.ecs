@@ -53,7 +53,7 @@ var playerMakeQuestionRender = function(game, entity, rect){
         var girl = cardForCategory('girl');
         var boy = cardForCategory('boy');
         var place = cardForCategory('place');
-        var txt = 'So you want to ask if it was ' + girl + ' and ' + boy + ' in ' + place + '?';
+        var txt = 'So you want to ask if it was ' + girl + ' and ' + boy + ' in the ' + place + '?';
         ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';
         ctx.fillText(txt, rect[0] + rect[2] / 2, rect[1] + 200);
@@ -73,12 +73,10 @@ var playerMakeQuestionRender = function(game, entity, rect){
             
             ctx.textAlign = 'center';
             _.each(cards, (card, i) => {
-                var x = rect[0] + 100 + 100 * i;
-                ctx.fillText(card.identityComponent.name, x, y);
-                ctx.strokeStyle = (card.identityComponent.key == entity.questionMakingComponent.cardsChosen[key]) ? '#ffffff' : '#000000';
-                var outlineRect = [x - 45, y - 60, 90, 120];
-                ctxRoundedRect(outlineRect);
-                touchRects[card.identityComponent.key] = outlineRect;
+                var cardRect = [rect[0] + 55 + 100 * i, y - 60, 90, 120];
+                card.cardRenderComponent.cardRender(card, cardRect,
+                                                    card.identityComponent.key == entity.questionMakingComponent.cardsChosen[key]);
+                touchRects[card.identityComponent.key] = cardRect;
             });
             ctx.textAlign = 'left';
             

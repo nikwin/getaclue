@@ -1,0 +1,66 @@
+healthComponent: ()
+resultComponent: ()
+renderComponents: [playerInformAnswerRenderComponent()]
+touchHandleComponent: playerInformAnswerTouchComponent()
+
+--- resultComponent
+
+result:
+personId:
+
+--- playerInformAnswerRenderComponent
+
+!inherit renderComponent
+
+getRect: #playerInformAnswerGetRect
+priority: 20
+render: #playerInformAnswerRender
+
+backColor: "#ccaaaa"
+textColor: "#000000"
+
+#
+var playerInformAnswerGetRect = function(entity){
+    return [width / 2 - 300, height / 2 - 200, 600, 400];
+};
+
+var playerInformAnswerRender = function(game, entity, rect){
+    ctx.fillStyle = this.backColor;
+    ctxFillRect(rect);
+
+    ctx.fillStyle = this.textColor;
+    var person = game.entityForUid(entity.resultComponent.personId);
+    var confirmText;
+
+    if (entity.resultComponent.result.success){
+        ctx.textAlign = 'center';
+        ctx.fillText(person.identityComponent.name + ' shows you:', rect[0] + rect[2] / 2, rect[1] + 100);
+        var card = game.entityForKey(entity.resultComponent.result.card);
+        card.cardRenderComponent.cardRender(card, [rect[0] + rect[2] / 2 - 45, rect[1] + 125, 90, 120]);
+        confirmText = 'No, Really?'
+        ctx.textAlign = 'left';
+    }
+    else{
+        ctx.textAlign = 'center';
+        ctx.fillText(person.identityComponent.name + " doesn't know anything about this.", rect[0] + rect[2] / 2, rect[1] + 100)
+        ctx.textAlign = 'left';
+        confirmText = 'WHAT???'
+    }
+    
+    playerMakeRenderConfirmRect(confirmText, entity, rect);
+};
+#
+
+--- playerInformAnswerTouchComponent
+
+handleTouch: #playerInformAnswerHandleTouch
+
+confirmRect: #undefined
+
+#
+var playerInformAnswerHandleTouch = function(entity, game, pos){
+    if (this.confirmRect && containsPos(this.confirmRect, pos)){
+        entity.healthComponent.kill();
+    }
+};
+#

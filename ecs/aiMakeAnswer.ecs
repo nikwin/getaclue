@@ -1,5 +1,7 @@
 answerComponent: aiAnswerComponent()
+renderComponents: [aiAnswerRenderComponent()]
 healthComponent: ()
+intervalComponent: aiAnswerIntervalComponent()
 
 --- aiAnswerComponent
 
@@ -19,7 +21,7 @@ var aiTryAnswer = function(question, game){
     var categories = Object.keys(question.questionComponent.cardsChosen);
     while (categories.length > 0){
         var category = _.sample(categories);
-        categories.splice(categories.index(category), 1);
+        categories.splice(categories.indexOf(category), 1);
 
         var card = question.questionComponent.cardsChosen[category];
         if (_.contains(person.personComponent.cardsHeld, card)){
@@ -34,3 +36,43 @@ var aiTryAnswer = function(question, game){
 };
 #
 
+--- aiAnswerRenderComponent
+
+!inherit renderComponent
+
+getRect: #aiAnswerGetRect
+priority: 20
+render: #aiAnswerRender
+
+backColor: "#ccaaaa"
+
+#
+var aiAnswerGetRect = function(){
+    return [width / 2 - 300, height / 2 - 200, 600, 400];
+};
+
+var aiAnswerRender = function(game, entity, rect){
+    ctx.fillStyle = this.backColor;
+    ctxFillRect(rect);
+
+    ctx.fillStyle = '#000000';
+    var person = game.entityForUid(entity.answerComponent.personId);
+    ctx.textAlign = 'center';
+    ctx.fillText(person.identityComponent.name + ' is thinking.', width / 2, height / 2);
+    ctx.textAlign = 'left';
+};
+#
+
+--- aiAnswerIntervalComponent
+
+thinkingInterval: 2
+updateInterval: #aiAnswerUpdateInterval
+
+#
+var aiAnswerUpdateInterval = function(entity, game, interval){
+    this.thinkingInterval -= interval;
+    if (this.thinkingInterval < 0){
+        entity.answerComponent.waiting = false;
+    }
+};
+#

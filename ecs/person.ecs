@@ -9,7 +9,7 @@ cardInferences: {}
 isPlayer: ?#false
 getQuestionMaker: #personGetQuestionMaker
 getAnswer: #personGetAnswer
-informAnswer: #personInformAnswer
+getInformAnswer: #personInformAnswer
 
 playerMakeQuestion: "playerMakeQuestion"
 playerMakeAnswer: "playerMakeAnswer"

@@ -34,10 +34,14 @@ var actionSystem = function(game, entities){
         result = answer.answerComponent.tryAnswer(question, game);
         if (result){
             answer.healthComponent.kill();
+
+            var answerKey = person.personComponent.getInformAnswer();
+            game.makeEntities(person, answerKey, {
+                result: result,
+                personId: answer.answerComponent.personId
+            });;
             
             if (result.success){
-                person.personComponent.informAnswer(result);
-
                 question.healthComponent.kill();
                 turnCounter.turnCounterComponent.turnCount += 1;
             }
@@ -66,6 +70,12 @@ var actionSystem = function(game, entities){
     else{
         game.makeEntities(person, person.personComponent.getQuestionMaker());
     }
+};
+
+var intervalSystem = function(game, entities, interval){
+    _.chain(entities)
+        .filter(entity => entity.intervalComponent)
+        .each(entity => entity.intervalComponent.updateInterval(entity, game, interval));
 };
 
 var healthSystem = function(game, entities){
@@ -107,8 +117,9 @@ Game.prototype.draw = function(){
     rendererSystem(this, this.entities);
 };
 
-Game.prototype.update = function(){
+Game.prototype.update = function(interval){
     actionSystem(this, this.entities);
+    intervalSystem(this, this.entities, interval);
     healthSystem(this, this.entities);
     return true;
 };
