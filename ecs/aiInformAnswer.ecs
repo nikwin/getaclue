@@ -1,0 +1,40 @@
+healthComponent: ()
+resultComponent: ()
+renderComponents: [aiInformAnswerRenderComponent()]
+touchHandleComponent: playerInformAnswerTouchComponent()
+
+--- aiInformAnswerRenderComponent
+
+!inherit renderComponent
+
+getRect: #playerInformAnswerGetRect
+priority: 21
+render: #aiInformAnswer
+
+backColor: "#ccaaaa"
+textColor: "#000000"
+
+#
+var aiInformAnswer = function(game, entity, rect){
+    ctx.fillStyle = this.backColor;
+    ctxFillRect(rect);
+
+    ctx.fillStyle = this.textColor;
+    var person = game.entityForUid(entity.resultComponent.showingId);
+    var recipient = game.entityForUid(entity.resultComponent.personId);
+
+    ctx.textAlign = 'center';
+
+    var question = _.filter(game.entities, entity => entity.questionComponent)[0];
+    var questionTxt = question.questionComponent.makeQuestionStatement(game);
+
+    ctx.fillText(questionTxt, rect[0] + rect[2] / 2, rect[1] + 100);
+
+    var txt = (entity.resultComponent.result.success) ?
+        (person.identityComponent.name + ' shows ' + recipient.identityComponent.name + ' a card.') :
+        person.identityComponent.name + " says that could be it!!!";
+    ctx.fillText(txt, rect[0] + rect[2] / 2, rect[1] + 150);
+
+    playerMakeRenderConfirmRect('Hmmmmm', entity, rect);
+};
+#

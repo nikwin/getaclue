@@ -53,7 +53,7 @@ var actionSystem = function(game, entities){
         personIndex %= people.length;
 
         var answeringPerson = people[personIndex];
-        game.makeEntities(person, person.personComponent.getAnswer(), {
+        game.makeEntities(answeringPerson, answeringPerson.personComponent.getAnswer(), {
             personId: answeringPerson.uid,
             askingId: person.uid,
             cardsChosen: question.questionComponent.cardsChosen

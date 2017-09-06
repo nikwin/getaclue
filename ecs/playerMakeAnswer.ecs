@@ -52,13 +52,13 @@ var playerAnswerRender = function(game, entity, rect){
     var questionText = asker.identityComponent.name + ' thinks it could be ';
     questionText += game.entityForKey(this.cardsChosen.girl).identityComponent.name + ' and ';
     questionText += game.entityForKey(this.cardsChosen.boy).identityComponent.name + ' in the ';
-    questionText += game.entityForKey(this.cardsChosen).identityComponent.name;
+    questionText += game.entityForKey(this.cardsChosen.place).identityComponent.name;
 
     ctx.fillStyle = this.textColor;
     ctx.fillText(questionText, rect[0] + 10, rect[1] + 50);
 
     var player = game.entityForUid(entity.answerComponent.personId);
-    var possibleCards = _.chain(cardsChosen)
+    var possibleCards = _.chain(this.cardsChosen)
         .filter(card =>  _.contains(player.personComponent.cardsHeld, card))
         .map(card => game.entityForKey(card))
         .value();

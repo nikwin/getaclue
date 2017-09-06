@@ -14,7 +14,7 @@ showingId:
 !inherit renderComponent
 
 getRect: #playerInformAnswerGetRect
-priority: 20
+priority: 21
 render: #playerInformAnswerRender
 
 backColor: "#ccaaaa"
