@@ -1,0 +1,7 @@
+answerComponent: playerAnswerComponent()
+renderComponents: [playerAnswerRenderComponent()]
+healthComponent: ()
+
+--- playerAnswerComponent
+
+!inherit answerComponent

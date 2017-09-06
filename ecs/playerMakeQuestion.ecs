@@ -1,4 +1,4 @@
-healthComponent: healthComponent()
+healthComponent: ()
 questionMakingComponent: playerQuestionMakingComponent()
 renderComponents: [playerMakeQuestionRenderComponent()]
 touchHandleComponent: playerMakeQuestionTouchHandleComponent()

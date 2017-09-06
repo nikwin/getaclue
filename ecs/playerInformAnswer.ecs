@@ -7,6 +7,7 @@ touchHandleComponent: playerInformAnswerTouchComponent()
 
 result:
 personId:
+showingId:
 
 --- playerInformAnswerRenderComponent
 
@@ -29,7 +30,7 @@ var playerInformAnswerRender = function(game, entity, rect){
     ctxFillRect(rect);
 
     ctx.fillStyle = this.textColor;
-    var person = game.entityForUid(entity.resultComponent.personId);
+    var person = game.entityForUid(entity.resultComponent.showingId);
     var confirmText;
 
     if (entity.resultComponent.result.success){

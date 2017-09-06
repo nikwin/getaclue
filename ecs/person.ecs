@@ -4,7 +4,9 @@ personComponent: ()
 --- personComponent
 
 cardsHeld: []
+cardsSeen: []
 cardInferences: {}
+cardsKnown: #
 
 isPlayer: ?#false
 getQuestionMaker: #personGetQuestionMaker
@@ -29,5 +31,9 @@ var personGetAnswer = function(){
 
 var personInformAnswer = function(){
     return (this.isPlayer) ? this.playerInformAnswer : this.aiInformAnswer;
+};
+
+var cardsKnown = function(){
+    return this.cardsHeld.concat(this.cardsSeen);
 };
 #

@@ -38,12 +38,13 @@ var actionSystem = function(game, entities){
             var answerKey = person.personComponent.getInformAnswer();
             game.makeEntities(person, answerKey, {
                 result: result,
-                personId: answer.answerComponent.personId
+                showingId: answer.answerComponent.personId
             });;
             
             if (result.success){
                 question.healthComponent.kill();
                 turnCounter.turnCounterComponent.turnCount += 1;
+                person.personComponent.cardsSeen.push(result.card);
             }
         }
     }

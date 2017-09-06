@@ -1,0 +1,38 @@
+healthComponent: ()
+questionMakingComponent: aiQuestionMakingComponent()
+renderComponents: [aiMakeQuestionRenderComponent()]
+touchHandleComponent: aiMakeQuestionTouchHandleComponent()
+
+--- aiQuestionMakingComponent
+
+!inherit questionMakingComponent
+
+makeQuestion: #aiMakeQuestionFn
+
+question: "question"
+
+#
+var aiMakeQuestionFn = function(entity, game, person){
+    var allCards = _.filter(game.entities, entity => entity.cardComponent);
+    var cardsToGuess = _.filter(allCards, card => !_.contains(person.personComponent.cardsKnown(), card.identityComponent.key));
+
+    var sortedCards = _.groupBy(cardsToGuess, card => card.cardComponent.category);
+    var cardsChosen = {};
+    
+    _.each(sortedCards, (cards, key) => {
+        var cardGroup = cards;
+        
+        if (cards.length == 0){
+            cardGroup = _.filter(allCards, card => (_.contains(person.personComponent.cardsHeld, card.identityComponent.key) &&
+                                                    card.cardComponent.category == key));
+        }
+
+        cardsChosen[key] = _.sample(cardGroup).identityComponent.key;
+    })
+
+    return game.makeEntities(entity, this.question, {
+        cardsChosen: cardsChosen,
+        personId: person.uid
+    });
+};
+#
