@@ -11,6 +11,8 @@ getRect: #playerInformAnswerGetRect
 priority: 21
 render: #aiInformAnswer
 
+questionText:
+
 backColor: "#ccaaaa"
 textColor: "#000000"
 
@@ -25,10 +27,7 @@ var aiInformAnswer = function(game, entity, rect){
 
     ctx.textAlign = 'center';
 
-    var question = _.filter(game.entities, entity => entity.questionComponent)[0];
-    var questionTxt = question.questionComponent.makeQuestionStatement(game);
-
-    ctx.fillText(questionTxt, rect[0] + rect[2] / 2, rect[1] + 100);
+    ctx.fillText(this.questionText, rect[0] + rect[2] / 2, rect[1] + 100);
 
     var txt = (entity.resultComponent.result.success) ?
         (person.identityComponent.name + ' shows ' + recipient.identityComponent.name + ' a card.') :

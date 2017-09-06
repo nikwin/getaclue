@@ -102,7 +102,7 @@ var playerAnswerHandleTouch = function(entity, game, touchPos){
 
     if (this.confirmRect && containsPos(this.confirmRect, touchPos)){
         if (entity.answerComponent.selectedCard){
-            entity.answerComponent.answerCard = entity.answerCard.selectedCard;
+            entity.answerComponent.answerCard = entity.answerComponent.selectedCard;
         }
         else{
             entity.answerComponent.noCard = true;

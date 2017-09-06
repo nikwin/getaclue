@@ -1,7 +1,5 @@
 healthComponent: ()
 questionMakingComponent: aiQuestionMakingComponent()
-renderComponents: [aiMakeQuestionRenderComponent()]
-touchHandleComponent: aiMakeQuestionTouchHandleComponent()
 
 --- aiQuestionMakingComponent
 

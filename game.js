@@ -38,14 +38,21 @@ var actionSystem = function(game, entities){
             var answerKey = person.personComponent.getInformAnswer();
             game.makeEntities(person, answerKey, {
                 result: result,
-                showingId: answer.answerComponent.personId
-            });;
+                showingId: answer.answerComponent.personId,
+                personId: person.uid,
+                questionText: question.questionComponent.makeQuestionStatement(game)
+            });
             
-            if (result.success){
+            if (result.success || question.questionComponent.offset == people.length){
                 question.healthComponent.kill();
                 turnCounter.turnCounterComponent.turnCount += 1;
-                person.personComponent.cardsSeen.push(result.card);
+                turnCounter.turnCounterComponent.turnCount %= people.length;
+                
+                if (result.success){
+                    person.personComponent.cardsSeen.push(result.card);
+                }
             }
+            
         }
     }
     else if (question){
@@ -59,10 +66,6 @@ var actionSystem = function(game, entities){
             cardsChosen: question.questionComponent.cardsChosen
         });
         question.questionComponent.offset += 1;
-        if (question.questionComponent.offset == people.length){
-            question.healthComponent.kill();
-            turnCounter.turnCounterComponent.turnCount += 1;
-        }
     }
     else if (questionMaker){
         question = questionMaker.questionMakingComponent.makeQuestion(questionMaker, game, person);
