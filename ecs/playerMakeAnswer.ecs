@@ -1,7 +1,112 @@
 answerComponent: playerAnswerComponent()
 renderComponents: [playerAnswerRenderComponent()]
 healthComponent: ()
+touchHandleComponent: playerAnswerTouchHandleComponent()
 
 --- playerAnswerComponent
 
 !inherit answerComponent
+
+tryAnswer: #playerTryAnswer
+answerCard: #undefined
+selectedCard: #undefined
+noCard: false
+
+#
+var playerTryAnswer = function(question, game){
+    if (this.answerCard === undefined && this.noCard === false){
+        return false;
+    }
+    else if (this.answerCard){
+        return {
+            card: this.answerCard,
+            success: true
+        };
+    }
+    else{
+        return {success: false};
+    }
+};
+#
+
+--- playerAnswerRenderComponent
+
+!inherit renderComponent
+
+render: #playerAnswerRender
+priority: 21
+getRect: #playerMakeQuestionGetRect
+
+cardsChosen:
+askingId:
+
+backColor: "#ccaaaa"
+textColor: "#000000"
+
+#
+var playerAnswerRender = function(game, entity, rect){
+    ctx.fillStyle = this.backColor;
+    ctxFillRect(rect);
+
+    var asker = game.entityForUid(this.askingId);
+    var questionText = asker.identityComponent.name + ' thinks it could be ';
+    questionText += game.entityForKey(this.cardsChosen.girl).identityComponent.name + ' and ';
+    questionText += game.entityForKey(this.cardsChosen.boy).identityComponent.name + ' in the ';
+    questionText += game.entityForKey(this.cardsChosen).identityComponent.name;
+
+    ctx.fillStyle = this.textColor;
+    ctx.fillText(questionText, rect[0] + 10, rect[1] + 50);
+
+    var player = game.entityForUid(entity.answerComponent.personId);
+    var possibleCards = _.chain(cardsChosen)
+        .filter(card =>  _.contains(player.personComponent.cardsHeld, card))
+        .map(card => game.entityForKey(card))
+        .value();
+
+    touchRects = {};
+    
+    if (possibleCards.length > 0){
+        _.each(possibleCards, (card, i) => {
+            var cardRect = [rect[0] + 55 + 100 * i, rect[1] + 100, 90, 120];
+            card.cardRenderComponent.cardRender(card, cardRect,
+                                                card.identityComponent.key == entity.answerComponent.selectedCard);
+            touchRects[card.identityComponent.key] = cardRect;
+        });
+
+        if (entity.answerComponent.selectedCard){
+            playerMakeRenderConfirmRect('GOSSIP!', entity, rect);
+        }
+    }
+    else{
+        playerMakeRenderConfirmRect('COULD BE?!?!', entity, rect);
+    }
+    
+    entity.touchHandleComponent.touchRects = touchRects;
+};
+#
+
+--- playerAnswerTouchHandleComponent
+
+handleTouch: #playerAnswerHandleTouch
+
+touchRect: #undefined
+confirmRect: #undefined
+
+#
+var playerAnswerHandleTouch = function(entity, game, touchPos){
+    _.each(this.touchRects, (rect, key) => {
+        if (containsPos(rect, touchPos)){
+            entity.answerComponent.selectedCard = key;
+        }
+    });
+
+    if (this.confirmRect && containsPos(this.confirmRect, touchPos)){
+        if (entity.answerComponent.selectedCard){
+            entity.answerComponent.answerCard = entity.answerCard.selectedCard;
+        }
+        else{
+            entity.answerComponent.noCard = true;
+        }
+    }
+};
+#

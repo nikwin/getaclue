@@ -52,9 +52,11 @@ var actionSystem = function(game, entities){
         var personIndex = turnCounter.turnCounterComponent.turnCount + question.questionComponent.offset;
         personIndex %= people.length;
 
-        person = people[personIndex];
+        var answeringPerson = people[personIndex];
         game.makeEntities(person, person.personComponent.getAnswer(), {
-            personId: person.uid
+            personId: answeringPerson.uid,
+            askingId: person.uid,
+            cardsChosen: question.questionComponent.cardsChosen
         });
         question.questionComponent.offset += 1;
         if (question.questionComponent.offset == people.length){
