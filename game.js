@@ -41,13 +41,16 @@ var actionSystem = function(game, entities){
             answer.healthComponent.kill();
 
             var answerKey = person.personComponent.getInformAnswer();
-            game.makeEntities(person, answerKey, {
-                result: result,
-                showingId: answer.answerComponent.personId,
-                personId: person.uid,
-                questionText: question.questionComponent.makeQuestionStatement(game)
-            });
-            
+
+            if (answer.answerComponent.skipResult){
+                game.makeEntities(person, answerKey, {
+                    result: result,
+                    showingId: answer.answerComponent.personId,
+                    personId: person.uid,
+                    questionText: question.questionComponent.makeQuestionStatement(game)
+                });
+            }
+                        
             if (result.success || question.questionComponent.offset == people.length){
                 question.healthComponent.kill();
                 tickTurn();

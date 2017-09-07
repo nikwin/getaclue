@@ -11,6 +11,7 @@ tryAnswer: #playerTryAnswer
 answerCard: #undefined
 selectedCard: #undefined
 noCard: false
+skipResult: true
 
 #
 var playerTryAnswer = function(question, game){

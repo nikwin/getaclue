@@ -1,4 +1,10 @@
+sidePanelComponent: ()
 renderComponents: [sidePanelRenderComponent()]
+touchHandleComponent: sidePanelTouchComponent()
+
+--- sidePanelComponent
+
+colors: #{}
 
 --- sidePanelRenderComponent
 
@@ -27,28 +33,72 @@ var sidePanelRender = function(game, entity, rect){
     ctx.fillStyle = this.textColor;
     ctx.strokeStyle = this.textColor;
 
+    var colorRects = [];
+
     var i = 0;
     _.each([false, true], (key) => {
         var cards = sortedCards[key];
-
+        
         _.each(cards, (card) => {
-            var cardRect = [rect[0] + 2, rect[1] + i * 25 + 2, 96, 20];
+            var cardRect = [rect[0] + 2, rect[1] + i * 30 + 2, 196, 25];
             ctxRoundedRect(cardRect);
-            ctx.fillText(card.identityComponent.name, cardRect[0] + 2, cardRect[1] + cardRect[3]);
+            ctx.fillStyle = '#000000';
+            ctx.fillText(card.identityComponent.name, cardRect[0] + 10, cardRect[1] + cardRect[3] - 5);
             if (key){
                 var textWidth = ctx.measureText(card.identityComponent.name).width;
-                var midY = cardRect[1] + cardRect[3] - 5;
+                var midY = cardRect[1] + cardRect[3] - 10;
                 ctx.beginPath();
-                ctx.moveTo(cardRect[0] + 2, midY);
-                ctx.lineTo(cardRect[0] + 2 + textWidth, midY);
+                ctx.moveTo(cardRect[0] + 10, midY);
+                ctx.lineTo(cardRect[0] + 10 + textWidth, midY);
                 ctx.stroke();
             }
+
+            var cardKey = card.identityComponent.key;
+
+            if (!entity.sidePanelComponent.colors[cardKey]){
+                entity.sidePanelComponent.colors[cardKey] = [false, false, false, false];
+            }
+
+            var colors = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff']
+
+            _.each(entity.sidePanelComponent.colors[cardKey], (chk, i) => {
+                var boxRect = [cardRect[0] + 100 + i * 25, cardRect[1] + 5, 15, 15];
+                if (chk){
+                    ctx.fillStyle = colors[i];
+                    ctxFillRect(boxRect);
+                }
+                else{
+                    ctx.strokeRect(boxRect[0], boxRect[1], boxRect[2], boxRect[3]);
+                }
+                colorRects.push({
+                    rect: boxRect, 
+                    key: cardKey,
+                    i: i});
+            });
+
             i += 1;
         });
     });
+
+    entity.touchHandleComponent.colorRects = colorRects;
 };
 
 var sidePanelGetRect = function(){
-    return [width - 100, 50, 100, height - 50];
+    return [width - 200, 75, 200, height - 50];
+};
+#
+
+---sidePanelTouchComponent
+
+colorRects: []
+handleTouch: #sidePanelHandleTouch
+
+#
+var sidePanelHandleTouch = function(entity, game, touchPos){
+    _.each(this.colorRects, (rectData) => {
+        if (containsPos(rectData.rect, touchPos)){
+            entity.sidePanelComponent.colors[rectData.key][rectData.i] = !entity.sidePanelComponent.colors[rectData.key][rectData.i];
+        }
+    });
 };
 #

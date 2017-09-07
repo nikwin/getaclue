@@ -20,7 +20,7 @@ var playerMakeQuestionFn = function(entity, game, person){
     if (this.confirmed){
         return game.makeEntities(entity, this.question, {
             cardsChosen: this.cardsChosen,
-            personId: person.uid
+            personId: person.uid,
             isGuess: this.isGuess
         })[0];
     }
@@ -71,6 +71,7 @@ var playerMakeQuestionRender = function(game, entity, rect){
         var makeGuessRect = [rect[0] + rect[2] / 2 - 100, rect[1] + 250, 200, 50];
         ctxRoundedRect(makeGuessRect)
         ctx.fillText("Just go public!!!!", makeGuessRect[0] + makeGuessRect[2] / 2, makeGuessRect[1] + makeGuessRect[3] - 20);
+        entity.touchHandleComponent.makeGuessRect = makeGuessRect;
         
         playerMakeRenderConfirmRect('YES!', entity, rect);
     }
