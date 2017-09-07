@@ -44,15 +44,19 @@ backColor: "#ccaaaa"
 textColor: "#000000"
 
 #
+var getCardStatement = function(cards, game){
+    return game.entityForKey(cards.girl).identityComponent.name + ' and ' +
+        game.entityForKey(cards.boy).identityComponent.name + ' in the ' +
+        game.entityForKey(cards.place).identityComponent.name;
+};
+
 var playerAnswerRender = function(game, entity, rect){
     ctx.fillStyle = this.backColor;
     ctxFillRect(rect);
 
     var asker = game.entityForUid(this.askingId);
     var questionText = asker.identityComponent.name + ' thinks it could be ';
-    questionText += game.entityForKey(this.cardsChosen.girl).identityComponent.name + ' and ';
-    questionText += game.entityForKey(this.cardsChosen.boy).identityComponent.name + ' in the ';
-    questionText += game.entityForKey(this.cardsChosen.place).identityComponent.name;
+    questionText += getCardStatement(this.cardsChosen, game);
 
     ctx.fillStyle = this.textColor;
     ctx.fillText(questionText, rect[0] + 10, rect[1] + 50);
@@ -89,7 +93,7 @@ var playerAnswerRender = function(game, entity, rect){
 
 handleTouch: #playerAnswerHandleTouch
 
-touchRect: #undefined
+touchRects: #undefined
 confirmRect: #undefined
 
 #

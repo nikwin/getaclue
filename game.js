@@ -27,6 +27,11 @@ var actionSystem = function(game, entities){
     var person = people[turnCounter.turnCounterComponent.turnCount];
     var result = _.filter(entities, entity => entity.resultComponent)[0];
 
+    var tickTurn = function(){
+        turnCounter.turnCounterComponent.turnCount += 1;
+        turnCounter.turnCounterComponent.turnCount %= people.length;
+    };
+
     if (result){
         
     }
@@ -45,8 +50,7 @@ var actionSystem = function(game, entities){
             
             if (result.success || question.questionComponent.offset == people.length){
                 question.healthComponent.kill();
-                turnCounter.turnCounterComponent.turnCount += 1;
-                turnCounter.turnCounterComponent.turnCount %= people.length;
+                tickTurn();
                 
                 if (result.success){
                     person.personComponent.cardsSeen.push(result.card);
@@ -56,16 +60,35 @@ var actionSystem = function(game, entities){
         }
     }
     else if (question){
-        var personIndex = turnCounter.turnCounterComponent.turnCount + question.questionComponent.offset;
-        personIndex %= people.length;
+        if (question.isGuess){
+            var guessChecker = game.entityForKey(PARAMETERS.guessChecker);
+            if (guessChecker.guessCheckerComponent.checkGuess(question)){
+                game.showEnd(true, person.identityComponent.name, guessChecker.guessCheckerComponent.cards);
+            }
+            else{
+                if (person.personComponent.isPlayer){
+                    game.showEnd(false, person.identityComponent.name, guessChecker.guessCheckerComponent.cards);
+                }
+                else{
+                    game.makeEntities(person, guessChecker.guessCheckerComponent.failResult, {
+                        personName: person.identityComponent.name
+                    });
+                    person.personComponent.canAskQuestions = false;
+                }
+            }
+        }
+        else{
+            var personIndex = turnCounter.turnCounterComponent.turnCount + question.questionComponent.offset;
+            personIndex %= people.length;
 
-        var answeringPerson = people[personIndex];
-        game.makeEntities(answeringPerson, answeringPerson.personComponent.getAnswer(), {
-            personId: answeringPerson.uid,
-            askingId: person.uid,
-            cardsChosen: question.questionComponent.cardsChosen
-        });
-        question.questionComponent.offset += 1;
+            var answeringPerson = people[personIndex];
+            game.makeEntities(answeringPerson, answeringPerson.personComponent.getAnswer(), {
+                personId: answeringPerson.uid,
+                askingId: person.uid,
+                cardsChosen: question.questionComponent.cardsChosen
+            });
+            question.questionComponent.offset += 1;
+        }
     }
     else if (questionMaker){
         question = questionMaker.questionMakingComponent.makeQuestion(questionMaker, game, person);
@@ -74,6 +97,11 @@ var actionSystem = function(game, entities){
         }
     }
     else{
+        while (!person.personComponent.canAskQuestions){
+            tickTurn();
+            person = people[turnCounter.turnCounterComponent.turnCount];
+        }
+        
         game.makeEntities(person, person.personComponent.getQuestionMaker());
     }
 };
@@ -103,16 +131,30 @@ Game.prototype.initialize = function(){
 
     people[0].personComponent.isPlayer = true;
 
-    var sortedCards = _.groupBy(cards, card => card.cardComponent.category);
+    var sortedCards = _.chain(cards)
+            .shuffle()
+            .groupBy(card => card.cardComponent.category)
+            .value();
+
+
     var personIndex = 0;
     
-    _.each(sortedCards, (cards) => {
-        _.each(cards, (card) => {
-            people[personIndex].personComponent.cardsHeld.push(card.key);
-            personIndex += 1;
-            personIndex %= people.length;
+    var answerCards = {};
+
+    _.each(sortedCards, (cards, category) => {
+        _.each(cards, (card, i) => {
+            if (i === 0){
+                answerCards[category] = card.identityComponent.key;
+            }
+            else{
+                people[personIndex].personComponent.cardsHeld.push(card.identityComponent.key);
+                personIndex += 1;
+                personIndex %= people.length;
+            }
         });
     });
+
+    this.entities.push(makeEcs(PARAMETERS.guessChecker, {cards: answerCards}));
     
     bindHandler.bindFunction(this.getTouchFunction());
 };
@@ -202,6 +244,10 @@ Game.prototype.getTouchFunction = function(){
                 
         return false;
     };
+};
+
+Game.prototype.getPlayer = function(){
+    return _.filter(this.entities, entity => entity.personComponent && entity.personComponent.isPlayer)[0];
 };
 
 var getGame = function(gameProperties){

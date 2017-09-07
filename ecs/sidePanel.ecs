@@ -1,0 +1,54 @@
+renderComponents: [sidePanelRenderComponent()]
+
+--- sidePanelRenderComponent
+
+!inherit renderComponent
+
+getRect: #sidePanelGetRect
+render: #sidePanelRender
+priority: 21
+
+backColor: "#aaaaaa"
+textColor: "#000000"
+
+#
+var sidePanelRender = function(game, entity, rect){
+    var person = game.getPlayer();
+    if (!person){
+        return;
+    }
+
+    var allCards = _.filter(game.entities, entity => entity.cardComponent);
+    var personCardsKnown = person.personComponent.cardsKnown();
+    var sortedCards = _.groupBy(allCards, card => _.contains(personCardsKnown, card.identityComponent.key));
+    
+    ctx.fillStyle = this.backColor;
+    ctxFillRect(rect);
+    ctx.fillStyle = this.textColor;
+    ctx.strokeStyle = this.textColor;
+
+    var i = 0;
+    _.each([false, true], (key) => {
+        var cards = sortedCards[key];
+
+        _.each(cards, (card) => {
+            var cardRect = [rect[0] + 2, rect[1] + i * 25 + 2, 96, 20];
+            ctxRoundedRect(cardRect);
+            ctx.fillText(card.identityComponent.name, cardRect[0] + 2, cardRect[1] + cardRect[3]);
+            if (key){
+                var textWidth = ctx.measureText(card.identityComponent.name).width;
+                var midY = cardRect[1] + cardRect[3] - 5;
+                ctx.beginPath();
+                ctx.moveTo(cardRect[0] + 2, midY);
+                ctx.lineTo(cardRect[0] + 2 + textWidth, midY);
+                ctx.stroke();
+            }
+            i += 1;
+        });
+    });
+};
+
+var sidePanelGetRect = function(){
+    return [width - 100, 50, 100, height - 50];
+};
+#

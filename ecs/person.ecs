@@ -1,5 +1,6 @@
 identityComponent: ()
 personComponent: ()
+healthComponent: ()
 
 --- personComponent
 
@@ -8,7 +9,8 @@ cardsSeen: []
 cardInferences: {}
 cardsKnown: #
 
-isPlayer: ?#false
+canAskQuestions: true
+
 getQuestionMaker: #personGetQuestionMaker
 getAnswer: #personGetAnswer
 getInformAnswer: #personInformAnswer

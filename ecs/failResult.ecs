@@ -1,0 +1,29 @@
+healthComponent: ()
+resultComponent: failResultComponent()
+renderComponents: [failResultRenderComponent()]
+touchHandleComponent: playerInformAnswerTouchComponent()
+
+--- failResultComponent
+
+personName:
+
+--- failResultRenderComponent
+
+!inherit menuRenderComponent
+
+render: #failResultRender
+
+#
+var failResultRender = function(game, entity, rect){
+    ctx.fillStyle = this.backColor;
+    ctxFillRect(rect);
+
+    ctx.fillStyle = this.textColor;
+    ctx.textAlign = 'center';
+    ctx.fillText(entity.resultComponent.personName + "looks to have jumped the gun.", rect[0] + rect[2] / 2, rect[1] + 100);
+    ctx.fillText('That gossip was clearly and provably false.', rect[0] + rect[2] / 2, rect[1] + 130);
+    ctx.fillText('And now, no one is going to talk to ' + entity.resultComponent.personName + ' again.', 
+                 rect[0] + rect[2] /2, rect[1] + 160);
+    playerMakeRenderConfirmRect(':(', entity, rect);
+};
+#

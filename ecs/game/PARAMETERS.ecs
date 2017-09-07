@@ -1,4 +1,5 @@
-!arg startEntities turnCounter|
+!arg startEntities turnCounter|sidePanel
 !arg startEntityGroups person|card
 
 !arg turnCounter turnCounter
+!arg guessChecker guessChecker

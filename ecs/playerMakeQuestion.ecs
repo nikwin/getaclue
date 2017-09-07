@@ -11,6 +11,7 @@ makeQuestion: #playerMakeQuestionFn
 firstConfirm: false
 confirmed: false
 question: "question"
+isGuess: false
 
 cardsChosen: #{}
 
@@ -20,6 +21,7 @@ var playerMakeQuestionFn = function(entity, game, person){
         return game.makeEntities(entity, this.question, {
             cardsChosen: this.cardsChosen,
             personId: person.uid
+            isGuess: this.isGuess
         })[0];
     }
     return false;
@@ -46,6 +48,7 @@ var playerMakeQuestionRender = function(game, entity, rect){
     var touchRects = {};
     entity.touchHandleComponent.confirmRect = undefined;
     entity.touchHandleComponent.rejectRect = undefined;
+    entity.touchHandleComponent.makeGuessRect = undefined;
 
     if (entity.questionMakingComponent.firstConfirm){
         var cards = _.map(entity.questionMakingComponent.cardsChosen, key => game.entityForKey(key));
@@ -58,6 +61,17 @@ var playerMakeQuestionRender = function(game, entity, rect){
         ctx.textAlign = 'center';
         ctx.fillText(txt, rect[0] + rect[2] / 2, rect[1] + 200);
 
+        ctx.textAlign = 'center';
+                
+        var rejectRect = [rect[0] + rect[2] / 2 - 100, rect[1] + rect[3] - 200, 200, 50];
+        ctxRoundedRect(rejectRect);
+        ctx.fillText("I don't know.", rejectRect[0] + rejectRect[2] / 2, rejectRect[1] + rejectRect[3] - 20)
+        entity.touchHandleComponent.rejectRect = rejectRect;
+        
+        var makeGuessRect = [rect[0] + rect[2] / 2 - 100, rect[1] + 250, 200, 50];
+        ctxRoundedRect(makeGuessRect)
+        ctx.fillText("Just go public!!!!", makeGuessRect[0] + makeGuessRect[2] / 2, makeGuessRect[1] + makeGuessRect[3] - 20);
+        
         playerMakeRenderConfirmRect('YES!', entity, rect);
     }
     else{
@@ -95,7 +109,7 @@ var playerMakeRenderConfirmRect = function(confirmText, entity, rect){
     var confirmRect = [rect[0] + rect[2] / 2 - 100, rect[1] + rect[3] - 100, 200, 50];
     ctxRoundedRect(confirmRect);
     ctx.textAlign = 'center';
-    ctx.fillText(confirmText, confirmRect[0] + confirmRect[2] / 2, confirmRect[1] + confirmRect[3] / 2);
+    ctx.fillText(confirmText, confirmRect[0] + confirmRect[2] / 2, confirmRect[1] + confirmRect[3] / 2 + 5);
     ctx.textAlign = 'left';
     
     entity.touchHandleComponent.confirmRect = confirmRect;
@@ -109,6 +123,7 @@ handleTouch: #playerMakeQuestionHandleTouch
 touchRects: #undefined
 confirmRect: #undefined
 rejectRect: #undefined
+makeGuessRect: #undefined
 
 #
 var playerMakeQuestionHandleTouch = function(entity, game, touchPos){
@@ -130,6 +145,11 @@ var playerMakeQuestionHandleTouch = function(entity, game, touchPos){
 
     if (this.rejectRect && containsPos(this.rejectRect, touchPos) && entity.questionMakingComponent.firstConfirm){
         entity.questionMakingComponent.firstConfirm = false;
+    }
+
+    if (this.makeGuessRect && containsPos(this.makeGuessRect, touchPos)){
+        entity.questionMakingComponent.confirmed = true;
+        entity.questionMakingComponent.isGuess = true;
     }
 };
 #

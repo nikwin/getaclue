@@ -1,0 +1,8 @@
+!inherit renderComponent
+
+getRect: #menuGetRect
+priority: 22
+
+backColor: "#ccaaaa"
+textColor: "#000000"
+

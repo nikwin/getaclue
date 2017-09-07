@@ -1,0 +1,15 @@
+guessCheckerComponent: ()
+
+--- guessCheckerComponent
+
+cards: 
+checkGuess: #
+failResult: "failResult"
+
+#
+var checkGuess = function(question){
+    return _.all(this.cards, (key, category) => {
+        return key == question.questionComponent.cardsChosen[category];
+    });
+};
+#

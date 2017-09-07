@@ -15,6 +15,15 @@ var aiMakeQuestionFn = function(entity, game, person){
     var cardsToGuess = _.filter(allCards, card => !_.contains(person.personComponent.cardsKnown(), card.identityComponent.key));
 
     var sortedCards = _.groupBy(cardsToGuess, card => card.cardComponent.category);
+
+    if (_.all(sortedCards, cards => cards.length === 1)){
+        return game.makeQuestion(entity, this.question, {
+            cardsChosen: sortedCards,
+            personId: person.uid,
+            isGuess: true
+        });
+    }
+
     var cardsChosen = {};
     
     _.each(sortedCards, (cards, key) => {
@@ -30,7 +39,8 @@ var aiMakeQuestionFn = function(entity, game, person){
 
     return game.makeEntities(entity, this.question, {
         cardsChosen: cardsChosen,
-        personId: person.uid
+        personId: person.uid,
+        isGuess: false
     });
 };
 #
