@@ -266,8 +266,56 @@ Game.prototype.getPlayer = function(){
     return _.filter(this.entities, entity => entity.personComponent && entity.personComponent.isPlayer)[0];
 };
 
+var StartScreen = function(gameProperties){
+    this.gameProperties = gameProperties;
+    this.gameProperties.next = new Game(this.gameProperties);
+};
+
+StartScreen.prototype.initialize = function(){
+    this.running = true;
+    bindHandler.bindFunction(this.getTouchFunction());
+};
+
+StartScreen.prototype.draw = function(){
+    ctx.fillStyle = '#ccaaaa';
+    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = '#000000';
+    ctx.textAlign = 'center';
+    var lines = [
+        "Your entire class just got called in for a special lecture",
+        "So, now you know that two people were caught somewhere in this school",
+        "And given the talk, you know their genders",
+        "Now, you and your group need to find out who it was",
+        "But you need to find out first! You can't let someone else break that gossip!",
+        "So, it's time to pool your knowledge and",
+    ];
+    _.each(lines, (line, i) => {
+        ctx.fillText(line, width / 2, 100 + 20 * i);
+    });
+
+    this.continueRect = [width / 2 - 200, height / 2 - 100, 400, 100];
+    ctxRoundedRect(this.continueRect);
+    ctx.fillText('GET A CLUE!', width / 2, height / 2 - 40);
+};
+
+StartScreen.prototype.update = function(){
+    return this.running;
+};
+
+StartScreen.prototype.getTouchFunction = function(){
+    var that = this;
+    return function(e){
+        e.preventDefault();
+
+        var pos = getPos(e);
+        if (containsPos(that.continueRect, pos)){
+            that.running = false;
+        }
+    };
+};
+
 var getGame = function(gameProperties){
-    return new Game(gameProperties);
+    return new StartScreen(gameProperties);
 };
 
 var GameProperties =function(){
