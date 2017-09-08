@@ -5,6 +5,7 @@ cardRenderComponent: ()
 --- cardComponent
 
 category:
+description: ?false
 
 --- cardRenderComponent
 

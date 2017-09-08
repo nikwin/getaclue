@@ -38,6 +38,12 @@ var playerInformAnswerRender = function(game, entity, rect){
         ctx.fillText(person.identityComponent.name + ' shows you:', rect[0] + rect[2] / 2, rect[1] + 100);
         var card = game.entityForKey(entity.resultComponent.result.card);
         card.cardRenderComponent.cardRender(card, [rect[0] + rect[2] / 2 - 45, rect[1] + 125, 90, 120]);
+
+        if (card.cardComponent.description){
+            var descriptionText = '"' + card.cardComponent.descriptionText + '"';
+            ctx.fillText(descriptionText, rect[0] + rect[2] / 2, rect[1] + 140);
+        }
+
         confirmText = 'No, Really?'
     }
     else{

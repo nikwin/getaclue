@@ -63,14 +63,27 @@ var actionSystem = function(game, entities){
         }
     }
     else if (question){
-        if (question.isGuess){
+        if (question.questionComponent.isGuess){
             var guessChecker = game.entityForKey(PARAMETERS.guessChecker);
             if (guessChecker.guessCheckerComponent.checkGuess(question)){
-                game.showEnd(true, person.identityComponent.name, guessChecker.guessCheckerComponent.cards);
+                game.makeEntities(person, PARAMETERS.endGame, {
+                    playerWin: person.personComponent.isPlayer,
+                    personName: person.identityComponent.name,
+                    cards: guessChecker.guessCheckerComponent.cards
+                });
             }
             else{
                 if (person.personComponent.isPlayer){
-                    game.showEnd(false, person.identityComponent.name, guessChecker.guessCheckerComponent.cards);
+                    var randomName = _.chain(people)
+                            .filter(person => !person.personComponent.isPlayer)
+                            .sample()
+                            .value().identityComponent.name;
+                    
+                    game.makeEntities(person, PARAMETERS.endGame, {
+                        playerWin: false,
+                        personName: randomName,
+                        cards: guessChecker.guessCheckerComponent.cards
+                    });
                 }
                 else{
                     game.makeEntities(person, guessChecker.guessCheckerComponent.failResult, {

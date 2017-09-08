@@ -1,5 +1,6 @@
 !arg startEntities turnCounter|sidePanel|settingsPanel
 !arg startEntityGroups person|card
 
-!arg turnCounter turnCounter
+!arg endGame endGame
 !arg guessChecker guessChecker
+!arg turnCounter turnCounter
