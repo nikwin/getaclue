@@ -27,6 +27,7 @@ var sidePanelRender = function(game, entity, rect){
     var allCards = _.filter(game.entities, entity => entity.cardComponent);
     var personCardsKnown = person.personComponent.cardsKnown();
     var sortedCards = _.groupBy(allCards, card => _.contains(personCardsKnown, card.identityComponent.key));
+    var people = _.filter(game.entities, entity => entity.personComponent);
     
     ctx.fillStyle = this.backColor;
     ctxFillRect(rect);
@@ -46,36 +47,44 @@ var sidePanelRender = function(game, entity, rect){
             ctx.fillText(card.identityComponent.name, cardRect[0] + 10, cardRect[1] + cardRect[3] - 5);
             if (key){
                 var textWidth = ctx.measureText(card.identityComponent.name).width;
+                var holdingPerson = _.filter(people, 
+                                             person => _.contains(person.personComponent.cardsHeld, card.identityComponent.key))[0];
+                ctx.fillText('(held by ' + person.identityComponent.name + ')', cardRect[0] + textWidth + 20, 
+                             cardRect[1] + cardRect[3] - 5);
+                /*
+                
                 var midY = cardRect[1] + cardRect[3] - 10;
                 ctx.beginPath();
                 ctx.moveTo(cardRect[0] + 10, midY);
                 ctx.lineTo(cardRect[0] + 10 + textWidth, midY);
                 ctx.stroke();
+                */
+                
             }
+            else{
+                var cardKey = card.identityComponent.key;
 
-            var cardKey = card.identityComponent.key;
+                if (!entity.sidePanelComponent.colors[cardKey]){
+                    entity.sidePanelComponent.colors[cardKey] = [false, false, false, false];
+                }
 
-            if (!entity.sidePanelComponent.colors[cardKey]){
-                entity.sidePanelComponent.colors[cardKey] = [false, false, false, false];
+                var colors = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff']
+
+                _.each(entity.sidePanelComponent.colors[cardKey], (chk, j) => {
+                    var boxRect = [cardRect[0] + 100 + j * 25, cardRect[1] + 5, 15, 15];
+                    if (chk){
+                        ctx.fillStyle = colors[i];
+                        ctxFillRect(boxRect);
+                    }
+                    else{
+                        ctx.strokeRect(boxRect[0], boxRect[1], boxRect[2], boxRect[3]);
+                    }
+                    colorRects.push({
+                        rect: boxRect, 
+                        key: cardKey,
+                        i: j});
+                });
             }
-
-            var colors = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff']
-
-            _.each(entity.sidePanelComponent.colors[cardKey], (chk, i) => {
-                var boxRect = [cardRect[0] + 100 + i * 25, cardRect[1] + 5, 15, 15];
-                if (chk){
-                    ctx.fillStyle = colors[i];
-                    ctxFillRect(boxRect);
-                }
-                else{
-                    ctx.strokeRect(boxRect[0], boxRect[1], boxRect[2], boxRect[3]);
-                }
-                colorRects.push({
-                    rect: boxRect, 
-                    key: cardKey,
-                    i: i});
-            });
-
             i += 1;
         });
     });
