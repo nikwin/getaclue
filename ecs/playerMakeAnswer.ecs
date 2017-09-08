@@ -71,6 +71,7 @@ var playerAnswerRender = function(game, entity, rect){
     touchRects = {};
     
     if (possibleCards.length > 0){
+        ctx.textAlign = 'center';
         _.each(possibleCards, (card, i) => {
             var cardRect = [rect[0] + 55 + 100 * i, rect[1] + 100, 90, 120];
             card.cardRenderComponent.cardRender(card, cardRect,
