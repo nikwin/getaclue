@@ -55,6 +55,7 @@ var playerAnswerRender = function(game, entity, rect){
     ctx.fillStyle = this.backColor;
     ctxFillRect(rect);
 
+    ctx.textAlign = 'left';
     var asker = game.entityForUid(this.askingId);
     var questionText = asker.identityComponent.name + ' thinks it could be ';
     questionText += getCardStatement(this.cardsChosen, game);
@@ -88,6 +89,7 @@ var playerAnswerRender = function(game, entity, rect){
     }
     
     entity.touchHandleComponent.touchRects = touchRects;
+    ctx.textAlign = 'left';
 };
 #
 

@@ -1,4 +1,4 @@
-!arg startEntities turnCounter|sidePanel
+!arg startEntities turnCounter|sidePanel|settingsPanel
 !arg startEntityGroups person|card
 
 !arg turnCounter turnCounter

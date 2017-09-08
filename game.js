@@ -42,7 +42,7 @@ var actionSystem = function(game, entities){
 
             var answerKey = person.personComponent.getInformAnswer();
 
-            if (answer.answerComponent.skipResult){
+            if (!answer.answerComponent.skipResult){
                 game.makeEntities(person, answerKey, {
                     result: result,
                     showingId: answer.answerComponent.personId,
@@ -259,4 +259,25 @@ var getGame = function(gameProperties){
 
 var GameProperties =function(){
     this.next = null;
+    
+    this.settings = localStorage.settings;
+
+    if (this.settings){
+        this.settings = JSON.parse(this.settings);
+    }
+    else{
+        this.settings = {
+            music: false
+        };
+    }
+
+    this.backgroundAudio = undefined;
+    
+    if (this.settings.music){
+        this.backgroundAudio.play();
+    }
+};
+
+GameProperties.prototype.save = function(){
+    localStorage.settings = JSON.stringify(this.settings);
 };

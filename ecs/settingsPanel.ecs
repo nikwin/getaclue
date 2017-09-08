@@ -1,0 +1,52 @@
+renderComponents: [settingsPanelRenderComponent()]
+touchHandleComponent: settingsPanelTouchComponent()
+
+--- settingsPanelRenderComponent
+
+!inherit renderComponent
+
+getRect: #function(){ return [width - 100, 0, 100, 50]; }
+priority: 24
+render: #settingsPanelRender
+
+closeImage: "close"
+soundImage: "sound"
+
+#
+var settingsPanelRender = function(game, entity, rect){
+    var soundRect = [rect[0] + 5, 5, 40, 40];
+    ctx.drawImage(getImage(this.soundImage), soundRect[0], soundRect[1]);
+    entity.touchHandleComponent.soundRect = soundRect;
+    
+    var closeRect = [rect[0] + 50, 5, 40, 40];
+    ctx.drawImage(getImage(this.closeImage), closeRect[0], closeRect[1]);
+    entity.touchHandleComponent.closeRect = closeRect;
+}
+#
+
+--- settingsPanelTouchComponent
+
+soundRect: #undefined
+closeRect: #undefined
+
+handleTouch: #settingsPanelHandleTouch
+
+#
+var settingsPanelHandleTouch = function(entity, game, touchPos){
+    if (containsPos(this.soundRect, touchPos)){
+        if (game.gameProperties.settings.music){
+            game.gameProperties.backgroundAudio.pause();
+        }
+        else{
+            game.gameProperties.backgroundAudio.play();
+        }
+        
+        game.gameProperties.settings.music = !game.gameProperties.settings.music;
+        game.gameProperties.save();
+    }
+    
+    if (containsPos(this.closeRect, touchPos)){
+        nw.App.quit();
+    }
+};
+#

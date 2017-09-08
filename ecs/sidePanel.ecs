@@ -49,7 +49,7 @@ var sidePanelRender = function(game, entity, rect){
                 var textWidth = ctx.measureText(card.identityComponent.name).width;
                 var holdingPerson = _.filter(people, 
                                              person => _.contains(person.personComponent.cardsHeld, card.identityComponent.key))[0];
-                ctx.fillText('(held by ' + person.identityComponent.name + ')', cardRect[0] + textWidth + 20, 
+                ctx.fillText('(held by ' + holdingPerson.identityComponent.name + ')', cardRect[0] + textWidth + 20, 
                              cardRect[1] + cardRect[3] - 5);
                 /*
                 
@@ -73,7 +73,7 @@ var sidePanelRender = function(game, entity, rect){
                 _.each(entity.sidePanelComponent.colors[cardKey], (chk, j) => {
                     var boxRect = [cardRect[0] + 100 + j * 25, cardRect[1] + 5, 15, 15];
                     if (chk){
-                        ctx.fillStyle = colors[i];
+                        ctx.fillStyle = colors[j];
                         ctxFillRect(boxRect);
                     }
                     else{
