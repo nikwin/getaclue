@@ -22,7 +22,7 @@ var endGameRender = function(game, entity, rect){
     ctx.fillStyle = this.textColor;
     ctx.textAlign = 'center';
     ctx.fillText(entity.resultComponent.personName + ' spread the gossip first!', rect[0] + rect[2] / 2, rect[1] + 100);
-    ctx.fillText('It was ' + getCardStatement(entity.resultComponent.cards), rect[0] + rect[2] / 2, rect[1] + 130);
+    ctx.fillText('It was ' + getCardStatement(entity.resultComponent.cards, game), rect[0] + rect[2] / 2, rect[1] + 130);
     
     ctx.fillText(entity.resultComponent.playerWin ? 'Congratulations!' : 'Better Luck Next Time!', rect[0] + rect[2] / 2, 
                  rect[1] + 200);

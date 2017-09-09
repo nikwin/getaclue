@@ -64,7 +64,7 @@ var actionSystem = function(game, entities){
     }
     else if (question){
         if (question.questionComponent.isGuess){
-            var guessChecker = game.entityForKey(PARAMETERS.guessChecker);
+            var guessChecker = _.filter(entities, entity => entity.guessCheckerComponent)[0];
             if (guessChecker.guessCheckerComponent.checkGuess(question)){
                 game.makeEntities(person, PARAMETERS.endGame, {
                     playerWin: person.personComponent.isPlayer,
@@ -171,7 +171,7 @@ Game.prototype.initialize = function(){
     });
 
     this.entities.push(makeEcs(PARAMETERS.guessChecker, {cards: answerCards}));
-    
+        
     bindHandler.bindFunction(this.getTouchFunction());
 };
 

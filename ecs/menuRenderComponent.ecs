@@ -6,3 +6,9 @@ priority: 22
 backColor: "#ccaaaa"
 textColor: "#000000"
 
+
+#
+var menuGetRect = function(){
+    return [10, 10, 800, 725];
+}
+#
