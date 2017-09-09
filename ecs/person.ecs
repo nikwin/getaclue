@@ -1,6 +1,11 @@
 identityComponent: ()
 personComponent: ()
 healthComponent: ()
+conjugationComponent: ()
+
+--- conjugationComponent
+
+thinkText: 
 
 --- personComponent
 

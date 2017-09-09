@@ -14,7 +14,7 @@ makeQuestionStatement: #
 #
 var makeQuestionStatement = function(game){
     var asker = game.entityForUid(this.personId);
-    var questionText = asker.identityComponent.name + ' thinks it could be ';
+    var questionText = asker.identityComponent.name + ' ' + asker.conjugationComponent.thinkText + ' it could be ';
     questionText += game.entityForKey(this.cardsChosen.girl).identityComponent.name + ' and ';
     questionText += game.entityForKey(this.cardsChosen.boy).identityComponent.name + ' in the ';
     questionText += game.entityForKey(this.cardsChosen.place).identityComponent.name;

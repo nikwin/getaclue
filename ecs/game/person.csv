@@ -1,4 +1,4 @@
-key,name
-personYou,you
-personBlue,Blue
-personGreen,Green
+key,name,thinkText
+personYou,you,thinks
+personBlue,Blue,think
+personGreen,Green,think
