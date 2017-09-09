@@ -282,10 +282,10 @@ StartScreen.prototype.draw = function(){
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'center';
     var lines = [
-        "Your entire class just got called in for a special lecture",
-        "So, now you know that two people were caught somewhere in this school",
-        "And given the talk, you know their genders",
-        "Now, you and your group need to find out who it was",
+        "Your entire class just got called in for a special lecture.",
+        "So, now you know that two people were caught somewhere in this school.",
+        "And given the talk, you know their genders.",
+        "Now, you and your group need to find out who it was.",
         "But you need to find out first! You can't let someone else break that gossip!",
         "So, it's time to pool your knowledge and",
     ];
