@@ -1,0 +1,13 @@
+!inherit renderComponent
+
+getRect: #smallMenuRenderGetRect
+priority: 21
+
+backColor: "#eeeeee"
+textColor: "#000000"
+
+#
+var smallMenuRenderGetRect = function(entity){
+    return [width / 2 - 300, height / 2 - 200, 600, 400];
+};
+#

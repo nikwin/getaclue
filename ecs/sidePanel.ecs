@@ -14,10 +14,14 @@ getRect: #sidePanelGetRect
 render: #sidePanelRender
 priority: 21
 
-backColor: "#aaaaaa"
+backColor: "#eeeeee"
 textColor: "#000000"
 
 #
+var sidePanelGetRect = function(){
+    return [width - 200, 75, 200, height - 135];
+};
+
 var sidePanelRender = function(game, entity, rect){
     var person = game.getPlayer();
     if (!person){
@@ -90,10 +94,6 @@ var sidePanelRender = function(game, entity, rect){
     });
 
     entity.touchHandleComponent.colorRects = colorRects;
-};
-
-var sidePanelGetRect = function(){
-    return [width - 200, 75, 200, height - 50];
 };
 #
 

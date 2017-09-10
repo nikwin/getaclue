@@ -30,25 +30,28 @@ var playerMakeQuestionFn = function(entity, game, person){
 
 --- playerMakeQuestionRenderComponent
 
-!inherit renderComponent
+!inherit menuRenderComponent
 
-getRect: #playerMakeQuestionGetRect
-priority: 18
 render: #playerMakeQuestionRender
 
 #
-var playerMakeQuestionGetRect = function(){
-    return [10, 10, 800, 725];
-};
-
 var playerMakeQuestionRender = function(game, entity, rect){
-    ctx.fillStyle = '#ccaaaa';
+    ctx.fillStyle = this.backColor;
     ctxFillRect(rect);
         
     var touchRects = {};
     entity.touchHandleComponent.confirmRect = undefined;
     entity.touchHandleComponent.rejectRect = undefined;
     entity.touchHandleComponent.makeGuessRect = undefined;
+
+    ctx.fillStyle = this.textColor;
+
+    ctx.font = getFont(30);
+    ctx.textAlign = 'center';
+    ctx.fillText("WHO AND WHERE?", rect[0] + rect[2] / 2, rect[1] + 45);
+
+    ctx.font = BASE_FONT;
+    
 
     if (entity.questionMakingComponent.firstConfirm){
         var cards = _.map(entity.questionMakingComponent.cardsChosen, key => game.entityForKey(key));
@@ -57,12 +60,10 @@ var playerMakeQuestionRender = function(game, entity, rect){
         var boy = cardForCategory('boy');
         var place = cardForCategory('place');
         var txt = 'So you want to ask if it was ' + girl + ' and ' + boy + ' in the ' + place + '?';
-        ctx.fillStyle = '#000000';
-        ctx.textAlign = 'center';
+        
+
         ctx.fillText(txt, rect[0] + rect[2] / 2, rect[1] + 200);
 
-        ctx.textAlign = 'center';
-                
         var rejectRect = [rect[0] + rect[2] / 2 - 100, rect[1] + rect[3] - 200, 200, 50];
         ctxRoundedRect(rejectRect);
         ctx.fillText("I don't know.", rejectRect[0] + rejectRect[2] / 2, rejectRect[1] + rejectRect[3] - 20)
@@ -82,10 +83,8 @@ var playerMakeQuestionRender = function(game, entity, rect){
         var idx = 0;
 
         _.each(sortedCards, (cards, key) => {
-            ctx.fillStyle = '#000000';
             var y = rect[1] + 150 * idx + 200;
-            ctx.fillText(key, rect[0] + 10, y);
-            
+                        
             ctx.textAlign = 'center';
             _.each(cards, (card, i) => {
                 var cardRect = [rect[0] + 55 + 100 * i, y - 60, 90, 120];
@@ -110,8 +109,10 @@ var playerMakeRenderConfirmRect = function(confirmText, entity, rect){
     var confirmRect = [rect[0] + rect[2] / 2 - 100, rect[1] + rect[3] - 100, 200, 50];
     ctxRoundedRect(confirmRect);
     ctx.textAlign = 'center';
+    ctx.font = getFont(18);
     ctx.fillText(confirmText, confirmRect[0] + confirmRect[2] / 2, confirmRect[1] + confirmRect[3] / 2 + 5);
     ctx.textAlign = 'left';
+    ctx.font = BASE_FONT;
     
     entity.touchHandleComponent.confirmRect = confirmRect;
 };

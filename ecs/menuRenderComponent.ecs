@@ -3,12 +3,12 @@
 getRect: #menuGetRect
 priority: 22
 
-backColor: "#ccaaaa"
+backColor: "#eeeeee"
 textColor: "#000000"
 
 
 #
 var menuGetRect = function(){
-    return [10, 10, 800, 725];
+    return [10, (height - 725) / 2, 800, 725];
 }
 #

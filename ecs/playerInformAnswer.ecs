@@ -11,22 +11,13 @@ showingId:
 
 --- playerInformAnswerRenderComponent
 
-!inherit renderComponent
+!inherit smallMenuRenderComponent
 
-getRect: #playerInformAnswerGetRect
-priority: 21
 render: #playerInformAnswerRender
 
 questionText:
 
-backColor: "#ccaaaa"
-textColor: "#000000"
-
 #
-var playerInformAnswerGetRect = function(entity){
-    return [width / 2 - 300, height / 2 - 200, 600, 400];
-};
-
 var playerInformAnswerRender = function(game, entity, rect){
     ctx.fillStyle = this.backColor;
     ctxFillRect(rect);

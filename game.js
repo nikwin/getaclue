@@ -1,3 +1,8 @@
+var getFont = function(size){ return '' + size + 'px IndieFlower'; };
+
+var BASE_FONT = getFont(12);
+ctx.font = BASE_FONT;
+
 var rendererSystem = function(game, entities){
     var renderers = _.map(_.range(25), () => []);
 
@@ -176,8 +181,7 @@ Game.prototype.initialize = function(){
 };
 
 Game.prototype.draw = function(){
-    ctx.fillStyle = '#aaaaaa';
-    ctx.fillRect(0, 0, width, height);
+    ctx.drawImage(getImage('back'), 0, 0);
     rendererSystem(this, this.entities);
 };
 
@@ -277,8 +281,13 @@ StartScreen.prototype.initialize = function(){
 };
 
 StartScreen.prototype.draw = function(){
-    ctx.fillStyle = '#ccaaaa';
-    ctx.fillRect(0, 0, width, height);
+    ctx.drawImage(getImage('back'), 0, 0);
+    
+    ctx.fillStyle = '#eeeeee';
+    ctx.fillRect(width / 5 - 20, 75, 3 * width / 5 + 40, 2 * height / 3);
+    
+    ctx.font = getFont(20);
+
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'center';
     var lines = [
@@ -286,16 +295,18 @@ StartScreen.prototype.draw = function(){
         "So, now you know that two people were caught somewhere in this school.",
         "And given the talk, you know their genders.",
         "Now, you and your group need to find out who it was.",
-        "But you need to find out first! You can't let someone else break that gossip!",
+        "But you need to find out first! You can't let anyone else break that gossip!",
         "So, it's time to pool your knowledge and",
     ];
     _.each(lines, (line, i) => {
-        ctx.fillText(line, width / 2, 100 + 20 * i);
+        ctx.fillText(line, width / 2, 120 + 50 * i);
     });
 
-    this.continueRect = [width / 2 - 200, height / 2 - 100, 400, 100];
+    ctx.font = getFont(40);
+    this.continueRect = [width / 2 - 200, height / 2 + 50, 400, 100];
     ctxRoundedRect(this.continueRect);
-    ctx.fillText('GET A CLUE!', width / 2, height / 2 - 40);
+    ctx.fillText('GET A CLUE!', width / 2, height / 2 + 120);
+    ctx.font = BASE_FONT;
 };
 
 StartScreen.prototype.update = function(){

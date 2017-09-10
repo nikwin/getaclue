@@ -5,16 +5,11 @@ touchHandleComponent: playerInformAnswerTouchComponent()
 
 --- aiInformAnswerRenderComponent
 
-!inherit renderComponent
+!inherit smallMenuRenderComponent
 
-getRect: #playerInformAnswerGetRect
-priority: 21
 render: #aiInformAnswer
 
 questionText:
-
-backColor: "#ccaaaa"
-textColor: "#000000"
 
 #
 var aiInformAnswer = function(game, entity, rect){

@@ -38,26 +38,23 @@ var aiTryAnswer = function(question, game){
 
 --- aiAnswerRenderComponent
 
-!inherit renderComponent
+!inherit smallMenuRenderComponent
 
-getRect: #aiAnswerGetRect
-priority: 20
 render: #aiAnswerRender
 
-backColor: "#ccaaaa"
-
 #
-var aiAnswerGetRect = function(){
-    return [width / 2 - 300, height / 2 - 200, 600, 400];
-};
-
 var aiAnswerRender = function(game, entity, rect){
     ctx.fillStyle = this.backColor;
     ctxFillRect(rect);
 
     ctx.fillStyle = '#000000';
-    var person = game.entityForUid(entity.answerComponent.personId);
     ctx.textAlign = 'center';
+
+    var question = _.filter(game.entities, (entity) => entity.questionComponent)[0];
+    var questionText = question.questionComponent.makeQuestionStatement(game);
+    ctx.fillText(questionText, width / 2, height / 2 - 100);
+
+    var person = game.entityForUid(entity.answerComponent.personId);
     ctx.fillText(person.identityComponent.name + ' is thinking.', width / 2, height / 2);
     ctx.textAlign = 'left';
 };

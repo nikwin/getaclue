@@ -32,17 +32,12 @@ var playerTryAnswer = function(question, game){
 
 --- playerAnswerRenderComponent
 
-!inherit renderComponent
+!inherit menuRenderComponent
 
 render: #playerAnswerRender
-priority: 21
-getRect: #playerMakeQuestionGetRect
 
 cardsChosen:
 askingId:
-
-backColor: "#ccaaaa"
-textColor: "#000000"
 
 #
 var getCardStatement = function(cards, game){
