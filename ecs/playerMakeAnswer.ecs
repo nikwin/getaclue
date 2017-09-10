@@ -32,7 +32,7 @@ var playerTryAnswer = function(question, game){
 
 --- playerAnswerRenderComponent
 
-!inherit menuRenderComponent
+!inherit smallMenuRenderComponent
 
 render: #playerAnswerRender
 
@@ -50,13 +50,20 @@ var playerAnswerRender = function(game, entity, rect){
     ctx.fillStyle = this.backColor;
     ctxFillRect(rect);
 
-    ctx.textAlign = 'left';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = this.textColor;
+
+    ctx.font = getFont(40);
+    var title = 'GOSSIP!';
+    ctx.fillText(title, rect[0] + rect[2] / 2, rect[1] + 40);
+
+    ctx.font = getFont(20);
     var asker = game.entityForUid(this.askingId);
     var questionText = asker.identityComponent.name + ' thinks it could be ';
     questionText += getCardStatement(this.cardsChosen, game);
+    ctx.fillText(questionText, rect[0] + rect[2] / 2, rect[1] + 120);
 
-    ctx.fillStyle = this.textColor;
-    ctx.fillText(questionText, rect[0] + 10, rect[1] + 50);
+    ctx.font = BASE_FONT;
 
     var player = game.entityForUid(entity.answerComponent.personId);
     var possibleCards = _.chain(this.cardsChosen)
@@ -67,14 +74,16 @@ var playerAnswerRender = function(game, entity, rect){
     touchRects = {};
     
     if (possibleCards.length > 0){
-        ctx.textAlign = 'center';
+        var startX = rect[0] + (rect[2] - 100 * possibleCards.length) / 2 + 5;
+
         _.each(possibleCards, (card, i) => {
-            var cardRect = [rect[0] + 55 + 100 * i, rect[1] + 100, 90, 120];
+            var cardRect = [startX + 100 * i, rect[1] + 150, 90, 120];
             card.cardRenderComponent.cardRender(card, cardRect,
                                                 card.identityComponent.key == entity.answerComponent.selectedCard);
             touchRects[card.identityComponent.key] = cardRect;
         });
 
+        ctx.strokeStyle = '#000000';
         if (entity.answerComponent.selectedCard){
             playerMakeRenderConfirmRect('GOSSIP!', entity, rect);
         }
