@@ -343,7 +343,10 @@ var GameProperties =function(){
         };
     }
 
-    this.backgroundAudio = undefined;
+    this.backgroundAudio = new Audio('sounds/pianofantasia-no-1-intervention.mp3');
+    this.backgroundAudio.loop = true;
+    this.backgroundAudio.volume = .1;
+    this.backgroundAudio.load();
     
     if (this.settings.music){
         this.backgroundAudio.play();
