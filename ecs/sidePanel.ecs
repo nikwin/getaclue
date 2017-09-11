@@ -19,7 +19,7 @@ textColor: "#000000"
 
 #
 var sidePanelGetRect = function(){
-    return [width - 200, 75, 200, height - 135];
+    return [width - 200, 75, 200, height - 140];
 };
 
 var sidePanelRender = function(game, entity, rect){
