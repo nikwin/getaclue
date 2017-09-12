@@ -10,12 +10,15 @@ description: ?false
 --- cardRenderComponent
 
 cardRender: #
+image: "test"
 
 #
 var cardRender = function(entity, rect, isHighlighted){
     ctx.strokeStyle = isHighlighted ? '#ff0000' : '#000000';
     ctxRoundedRect(rect);
     ctx.fillStyle = '#000000';
-    ctx.fillText(entity.identityComponent.name, rect[0] + 45, rect[1] + 60);
+    ctx.fillText(entity.identityComponent.name, rect[0] + 45, rect[1] + 20);
+
+    ctx.drawImage(getImage(this.image), rect[0] + (rect[2] - 34) / 2, rect[1] + 40, 26, 55);
 };
 #
